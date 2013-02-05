@@ -126,15 +126,17 @@
     (insert
      (format "%-5s %-3s %-10s %-10s %-20s %-5s  %-15s"
               (plist-get issue :number)
-	      (plist-get (plist-get issue :milestone) :number)
-              (plist-get (plist-get issue :user) :login)
+	      (let ((milestone (plist-get (plist-get issue :milestone) :number)))
+		(if milestone milestone ""))
+	      (let ((login (plist-get (plist-get issue :user) :login)))
+		(substring login 0 (min 10 (length login))))
               (let ((assignee (plist-get (plist-get issue :assignee) :login)))
-                (if assignee
-                    assignee
-                  ""))
+		(let ((assignee (if assignee assignee "")))
+		  (substring assignee 0 (min 10 (length assignee)))))
               (plist-get issue :created_at)
               (plist-get issue :state)
-              (plist-get issue :title)))
+	      (let ((title (plist-get issue :title)))
+		(substring title 0 (min (- (window-width) 5 1 3 1 10 1 10 1 20 1 5 2 1) (length title))))))
     (let ((cur-line-end (point)))
       (add-text-properties cur-line-start cur-line-end
                            `(issue ,(plist-get issue :html_url)))
