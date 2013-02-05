@@ -46,7 +46,8 @@
   (completing-read "Repository: "
                    github-autocomplete-repos
                    nil nil
-                   (concat github-login "/"))) ;; XXX: Defaults to using your login to autcomplete. Might not be true.
+                   "")) ;; (concat github-login "/"))) ;; default to loging to autocomplete
+
 
 ;; (defun github-repos ()
 ;;   "Reload all of user's repos"
