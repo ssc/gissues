@@ -57,15 +57,16 @@
 
 
 ;; Display issues for repo.
-;;  - [X] o - open the issue in the browser
+;;  - [X] g = github.com (view on github.com)
+;;  - [X] o - open create new issue 
 ;;  - [ ] r - Refresh issues
 ;;  - [ ] f - Close issue
 ;;  - [ ] l - Add label to issue
 ;;  - [ ] m - Add milestone?
-;;  - [X] n = New Issue
+;;  - [X] n/p = next/previous issue
 ;;  - [ ] c - Comment on issue
 ;;  - [X] q - Quit
-;;  - [ ] <RET> - View issue
+;;  - [X] <RET> - View issue
 (define-derived-mode github-issues-list-mode fundamental-mode
   "github-issues-list-mode"
   "Major mode for listing Github issues."
@@ -82,19 +83,47 @@
 
 
    
-  (define-key github-issues-list-mode-map "n" 'github-issues-new)
+  (define-key github-issues-list-mode-map "n" 'github-next-line)
+  (define-key github-issues-list-mode-map "p" 'github-previous-line)
+  (define-key github-issues-list-mode-map "o" 'github-issues-new)
   (define-key github-issues-list-mode-map "q" 'github-issues-list-close)
-  (define-key github-issues-list-mode-map "o" 'github-issues-list-open))
+  (define-key github-issues-list-mode-map "g" 'github-issues-list-open)
+  (define-key github-issues-list-mode-map "\r" 'github-issues-show)) ;;  (define-key github-issues-list-mode-map "\r" 'github-issues-list-open))
+
+(define-derived-mode github-issue-mode fundamental-mode
+  "github-issues-list-mode"
+  "Major mode for listing Github issues."
+  (define-key github-issue-mode-map "g" 'github-issues-list-open)
+  (define-key github-issue-mode-map "q" 'github-issue-close)
+  )
+
+(defun github-next-line()
+  (interactive)
+  (next-line)
+  (save-selected-window
+    (github-issues-show)))
+
+(defun github-previous-line()
+  (interactive)
+  (previous-line)
+  (save-selected-window
+  (github-issues-show)))
 
 (defun github-issues-list-close ()
   "Close the window."
   (interactive)
   (kill-buffer))
 
+(defun github-issue-close ()
+  "Close the window."
+  (interactive)
+  (quit-window t))
+
+
 (defun github-issues-list-open ()
   "Close the window."
   (interactive)
-  (browse-url (get-text-property (point) 'issue)))
+  (browse-url (plist-get (get-text-property (point) 'issue) :html_url)))
 
 
 (defun github-issues-list ()
@@ -139,10 +168,8 @@
 		(substring title 0 (min (- (window-width) 5 1 3 1 10 1 10 1 20 1 5 2 1) (length title))))))
     (let ((cur-line-end (point)))
       (add-text-properties cur-line-start cur-line-end
-                           `(issue ,(plist-get issue :html_url)))
-      (insert "\n"))))
-
-
+                           `(issue ,issue)))
+    (insert "\n")))
 
 
 ;; user, title, comments, labels created_at
@@ -167,7 +194,29 @@
 ;; - l - Add label
 (defun github-issues-show ()
   "Show a particular issue"
-  nil)
+  (interactive)
+  (let ((issue (get-text-property (point) 'issue)))
+    (let ((buf (get-buffer-create (concat "*Issue*")))
+	  (body (plist-get issue :body))
+	  (title (plist-get issue :title)))
+      (pop-to-buffer buf)
+      (github-issue-mode)
+      (setq buffer-read-only nil) 
+      (let ((cur-line-start (point)))
+	(erase-buffer)
+	(insert (number-to-string (plist-get issue :number)) " " title "\n")
+	(insert "Author: " (plist-get (plist-get issue :user) :login) "\n")
+	(insert "Assignee: " (let ((assignee (plist-get (plist-get issue :assignee) :login)))
+			       (if assignee assignee "(none)")) "\n")
+	(insert "Comments: " (number-to-string (plist-get issue :comments)) "\n")
+	(insert "\n")
+	(insert (replace-regexp-in-string "[\r]*" "" body))
+	(let ((cur-line-end (point)))
+	  (add-text-properties cur-line-start cur-line-end
+			       `(issue ,issue))))
+      
+      (setq buffer-read-only t)
+      (goto-char (point-min)))))
 
 
 
