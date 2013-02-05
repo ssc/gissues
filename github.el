@@ -73,7 +73,7 @@
   "Major mode for listing Github issues."
   (org-set-local
    'header-line-format
-           (format "%-5s %-3s %-10s %-10s %-20s %-5s  %-20s Quit `q'. Open in Browser `o'"
+           (format "%-5s %-3s %-10s %-10s %-20s %-5s  %-15s `q'uit. `o'pen new issue. view on `g'ithub.com. "
                    "ID"
 		   "Mil"
                    "User"
