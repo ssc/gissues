@@ -193,11 +193,9 @@
   (github-api-request
    "POST"
    (concat "repos/" (github-repo-complete) "/issues")
-
-   (json-encode `(:title ,(url-hexify-string (buffer-substring-no-properties (point-min) (line-end-position)))
-                  :body ,(url-hexify-string (buffer-substring-no-properties (line-end-position) (buffer-end 1))))))
-    (kill-buffer))
-
+   (json-encode `(:title ,(buffer-substring-no-properties (point-min) (line-end-position))
+		  :body ,(buffer-substring-no-properties (line-end-position) (buffer-end 1)))))
+  (kill-buffer))
 
 (defun github-issues-new-cancel ()
   "Cancel the creation of the the issue."
