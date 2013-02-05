@@ -185,6 +185,14 @@
         (github-issues-new-mode)))))
 
 
+
+;; From http://xahlee.blogspot.com/2011/09/emacs-lisp-function-to-trim-string.html
+(defun trim-string (string)
+  "Remove white spaces in beginning and ending of STRING.
+White space here is any of: space, tab, emacs newline (line feed, ASCII 10)."
+  (replace-regexp-in-string "\\`[ \t\n]*" "" (replace-regexp-in-string "[ \t\n]*\\'" "" string)))
+
+
 ;; The first line is the title, everything else is the body.
 (defun github-issues-new-create ()
   "Create the issue on github."
@@ -194,7 +202,7 @@
    "POST"
    (concat "repos/" (github-repo-complete) "/issues")
    (json-encode `(:title ,(buffer-substring-no-properties (point-min) (line-end-position))
-		  :body ,(buffer-substring-no-properties (line-end-position) (buffer-end 1)))))
+		  :body ,(trim-string (buffer-substring-no-properties (line-end-position) (buffer-end 1))))))
   (kill-buffer))
 
 (defun github-issues-new-cancel ()
