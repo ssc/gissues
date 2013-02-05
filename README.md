@@ -1,12 +1,11 @@
 # Description
 
-A way to interact with github through Emacs. Currently only supports
-posting issues.
+A way to interact with Github Issues through Emacs (think github-issues-mode).
 
 # Config
 
-    (load "~/path/to/github.el/github.el")
-    (require 'github)
+    (load "~/path/to/gissues/github.el")
+    (require 'gissues)
 
     (setq github-login "abhiyerra")
     ;; Enter your github password.
@@ -19,5 +18,4 @@ posting issues.
 
 # Help
 
- - M-x github-issues-new - Create a new issue for a repository.
- - M-x github-issues-list - List issues for a repository.
+ - M-x gissues - List issues for a repository.

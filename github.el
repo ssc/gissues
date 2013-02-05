@@ -288,4 +288,4 @@ White space here is any of: space, tab, emacs newline (line feed, ASCII 10)."
 
 (defalias 'gissues 'github-issues-list)
 
-(provide 'github)
+(provide 'gissues)
