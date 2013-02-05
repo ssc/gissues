@@ -107,10 +107,15 @@
         (with-current-buffer buf
           (switch-to-buffer buf)
           (github-issues-list-mode)
-          (let ((issues (github-grab-issues repo)))
-            (switch-to-buffer buf)
-            (mapcar 'github--insert-issue-row issues))
-          issues)
+	  (let ((pg 1)
+		(maxpg 10) ;; just set artibrary limit of 10 (i.e. 1000 issues)
+		issues)
+	    (while (and (< pg (+ maxpg 1)) 
+			(> (length (setq issues (github-grab-issues repo pg))) 0)) 
+	      (mapcar 'github--insert-issue-row issues)
+	      (if (< (length issues) 100)
+		  (setq pg (+ maxpg 1)) ;; hack to avoid extra unnecessary fetch
+		(setq pg (+ pg 1))))))
         (setq buffer-read-only t)
         (buffer-disable-undo)))))
 
@@ -137,10 +142,10 @@
 
 
 ;; user, title, comments, labels created_at
-(defun github-grab-issues (repo)
+(defun github-grab-issues (repo page)
   "Display the results for the repo."
   (save-excursion
-    (switch-to-buffer (github-api-request "GET" (concat "repos/" repo "/issues") ""))
+    (switch-to-buffer (github-api-request "GET" (concat "repos/" repo "/issues?page=" (number-to-string page) "&per_page=100") ""))
     (goto-char (point-min))
     (re-search-forward "^\n")
     (beginning-of-line)
