@@ -62,6 +62,7 @@
 ;;  - [ ] f - Close issue
 ;;  - [ ] l - Add label to issue
 ;;  - [ ] m - Add milestone?
+;;  - [X] n = New Issue
 ;;  - [ ] c - Comment on issue
 ;;  - [X] q - Quit
 ;;  - [ ] <RET> - View issue
@@ -79,6 +80,9 @@
                    "State"
                    "Title"))
 
+
+   
+  (define-key github-issues-list-mode-map "n" 'github-issues-new)
   (define-key github-issues-list-mode-map "q" 'github-issues-list-close)
   (define-key github-issues-list-mode-map "o" 'github-issues-list-open))
 
