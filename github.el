@@ -166,8 +166,11 @@
   "Major mode for entering new Github issues."
   (org-set-local
    'header-line-format
-   "github issues ticket. Finish `C-c C-c', abort `C-c C-k'.")
-
+   "Create Issue (first line=title). Finish `C-c C-c', abort `C-c C-k'.")
+  ;; http://tbaggery.com/2008/04/19/a-note-about-git-commit-messages.html
+  ;; Make sure messages are Github friendly
+  (set-fill-column 72)
+  (auto-fill-mode 1)
   (define-key github-issues-new-mode-map "\C-c\C-c" 'github-issues-new-create)
   (define-key github-issues-new-mode-map "\C-c\C-k" 'github-issues-new-cancel))
 
