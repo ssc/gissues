@@ -107,6 +107,8 @@
         (with-current-buffer buf
           (switch-to-buffer buf)
           (github-issues-list-mode)
+	  (setq buffer-read-only nil) 
+	  (erase-buffer)
 	  (let ((pg 1)
 		(maxpg 10) ;; just set artibrary limit of 10 (i.e. 1000 issues)
 		issues)
