@@ -70,8 +70,9 @@
   "Major mode for listing Github issues."
   (org-set-local
    'header-line-format
-           (format "%-5s %-10s %-10s %-20s %-5s  %-20s Quit `q'. Open in Browser `o'"
+           (format "%-5s %-3s %-10s %-10s %-20s %-5s  %-20s Quit `q'. Open in Browser `o'"
                    "ID"
+		   "Mil"
                    "User"
                    "Assignee"
                    "Created At"
@@ -112,8 +113,9 @@
 (defun github--insert-issue-row (issue)
   (let ((cur-line-start (point)))
     (insert
-     (format "%-5s %-10s %-10s %-20s %-5s  %-15s"
+     (format "%-5s %-3s %-10s %-10s %-20s %-5s  %-15s"
               (plist-get issue :number)
+	      (plist-get (plist-get issue :milestone) :number)
               (plist-get (plist-get issue :user) :login)
               (let ((assignee (plist-get (plist-get issue :assignee) :login)))
                 (if assignee
