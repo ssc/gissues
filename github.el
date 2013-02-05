@@ -70,7 +70,13 @@
   "Major mode for listing Github issues."
   (org-set-local
    'header-line-format
-   "github issues. Quit `q'. Open in Browser `o'")
+           (format "%-5s %-10s %-10s %-20s %-5s  %-20s Quit `q'. Open in Browser `o'"
+                   "ID"
+                   "User"
+                   "Assignee"
+                   "Created At"
+                   "State"
+                   "Title"))
 
   (define-key github-issues-list-mode-map "q" 'github-issues-list-close)
   (define-key github-issues-list-mode-map "o" 'github-issues-list-open))
@@ -96,14 +102,6 @@
         (with-current-buffer buf
           (switch-to-buffer buf)
           (github-issues-list-mode)
-          (insert
-           (format "%-5s %-10s %-10s %-20s %-5s  %-20s\n\n"
-                   "ID"
-                   "User"
-                   "Assignee"
-                   "Created At"
-                   "State"
-                   "Title"))
           (let ((issues (github-grab-issues repo)))
             (switch-to-buffer buf)
             (mapcar 'github--insert-issue-row issues))
