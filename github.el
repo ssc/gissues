@@ -286,4 +286,6 @@ White space here is any of: space, tab, emacs newline (line feed, ASCII 10)."
     (url-retrieve-synchronously
      (concat "https://api.github.com/" url))))
 
+(defalias 'gissues 'github-issues-list)
+
 (provide 'github)
