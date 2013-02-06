@@ -287,5 +287,6 @@ White space here is any of: space, tab, emacs newline (line feed, ASCII 10)."
      (concat "https://api.github.com/" url))))
 
 (defalias 'gissues 'github-issues-list)
+(defalias 'gissues-new 'github-issues-new)
 
 (provide 'gissues)

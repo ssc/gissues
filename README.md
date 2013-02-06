@@ -18,4 +18,5 @@ A way to interact with Github Issues through Emacs (think github-issues-mode).
 
 # Help
 
- - M-x gissues - List issues for a repository.
+ - M-x gissues - List issues for a repository
+ - M-x gissues-new - Create a new issue
