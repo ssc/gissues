@@ -43,7 +43,7 @@
 (defvar github-autocomplete-repos '())
 
 (defun github-repo-complete ()
-  (completing-read "Repository: "
+  (ido-completing-read "Repository: "
                    github-autocomplete-repos
                    nil nil
                    "")) ;; (concat github-login "/"))) ;; default to loging to autocomplete
